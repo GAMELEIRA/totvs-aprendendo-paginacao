@@ -1,0 +1,48 @@
+import { HomeService } from './home.service';
+import { Component, ViewChild, OnInit } from '@angular/core';
+import { IonInfiniteScroll } from '@ionic/angular';
+import { Observable } from 'rxjs';
+
+@Component({
+  selector: 'app-home',
+  templateUrl: 'home.page.html',
+  styleUrls: ['home.page.scss'],
+})
+export class HomePage implements OnInit {
+  @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
+
+  public pessoas = [];
+  public hasNext = false;
+  public page = 1;
+
+  constructor(private _homeService: HomeService) { }
+
+  ngOnInit() {
+    this._carregarPessoas();
+  }
+
+  private _carregarPessoas(page: number): void {
+    this._homeService.buscarPessoas(page).subscribe(res => {
+      this.pessoas = [...this.pessoas, ...res.items];
+      this.hasNext = res.hasNext;
+    });
+  }
+
+  doRefresh(event: any): void {
+    console.log('Realizando refresh');
+    this._carregarPessoas();
+    event.target.complete();
+  }
+
+  public showMorePeoples(event: any): void {
+    console.log("Buscando mais pessoas!");
+    if (this.hasNext) {
+      const page = this.page++;
+      this._carregarPessoas(page);
+      event.target.complete();
+    } else {
+      event.target.disabled = true;
+    }
+  }
+
+}
