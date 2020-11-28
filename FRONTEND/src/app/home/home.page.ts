@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 export class HomePage implements OnInit {
   @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
 
-  public pessoas = [];
+  public pessoas = new Array();
   public hasNext = false;
   public page = 1;
 
@@ -21,8 +21,10 @@ export class HomePage implements OnInit {
     this._carregarPessoas();
   }
 
-  private _carregarPessoas(page: number): void {
+  private _carregarPessoas(page: number = 1): void {
     this._homeService.buscarPessoas(page).subscribe(res => {
+      console.log(this.pessoas);
+      console.log(res.items);
       this.pessoas = [...this.pessoas, ...res.items];
       this.hasNext = res.hasNext;
     });
@@ -38,8 +40,10 @@ export class HomePage implements OnInit {
     console.log("Buscando mais pessoas!");
     if (this.hasNext) {
       const page = this.page++;
-      this._carregarPessoas(page);
-      event.target.complete();
+      setTimeout(() => {
+        this._carregarPessoas(page);
+        event.target.complete();
+      }, 1000);
     } else {
       event.target.disabled = true;
     }

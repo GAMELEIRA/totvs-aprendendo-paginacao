@@ -10,13 +10,17 @@
     <ion-refresher-content>
     </ion-refresher-content>
   </ion-refresher>
-  <ion-list *ngFor="let pessoa of pessoas">
-    <ion-item>
-      <ion-label>Nome</ion-label>
-      {{pessoa.name}}
-    </ion-item>
-  </ion-list>
- <ion-infinite-scroll threshold=" 100px" (ionInfinite)="showMorePeoples($event)">
+  <div>
+    <ion-list *ngFor="let pessoa of pessoas">
+      <div>
+        <ion-item>
+          <ion-label>Nome</ion-label>
+          {{pessoa.name}}
+        </ion-item>
+      </div>
+    </ion-list>
+  </div>
+  <ion-infinite-scroll threshold=" 100px" (ionInfinite)="showMorePeoples($event)">
     <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
     </ion-infinite-scroll-content>
   </ion-infinite-scroll>
